@@ -1,20 +1,32 @@
-locals {
-  use_vm       = var.deployment_mode == "vm"
-  use_cloudsql = var.deployment_mode == "cloudsql"
+terraform {
+  required_version = ">= 1.5.0"
 
-  vm_ip   = one(google_compute_address.vm_ip[*].address)
-  sql_ip  = one(google_sql_database_instance.mysql[*].public_ip_address)
-  db_host = coalesce(local.vm_ip, local.sql_ip)
+  required_providers {
+    google = { source = "hashicorp/google", version = ">= 5.30.0, < 6.0.0" }
+    null   = { source = "hashicorp/null", version = "~> 3.2" }
+    random = { source = "hashicorp/random", version = "~> 3.6" }
+  }
 }
 
-resource "google_project_service" "compute" {
-  count              = local.use_vm ? 1 : 0
-  service            = "compute.googleapis.com"
-  disable_on_destroy = false
+provider "google" {
+  project = var.gcp_project_id
+  region  = var.gcp_region
+  zone    = var.gcp_zone
 }
 
-resource "google_project_service" "sqladmin" {
-  count              = local.use_cloudsql ? 1 : 0
-  service            = "sqladmin.googleapis.com"
-  disable_on_destroy = false
+# Ambos modos de instalación viven en ./modes; deployment_mode decide cuál se crea.
+module "modes" {
+  source = "./modes"
+
+  deployment_mode  = var.deployment_mode
+  name_prefix      = var.name_prefix
+  region           = var.gcp_region
+  zone             = var.gcp_zone
+  db_name          = var.db_name
+  db_user          = var.db_user
+  db_password      = var.db_password
+  authorized_cidrs = var.authorized_cidrs
+  schema_path      = var.load_schema ? "${path.root}/schema/schema.sql" : null
+  vm               = var.vm
+  cloudsql         = var.cloudsql
 }
