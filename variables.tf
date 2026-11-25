@@ -76,7 +76,7 @@ variable "load_schema" {
 
 # --- Red --------------------------------------------------------------------
 variable "authorized_cidrs" {
-  description = "IPs/CIDR con acceso al puerto 3306. Ej: [\"203.0.113.10/32\"]."
+  description = "IPs/CIDR con acceso al puerto 3306, por ejemplo: [\"80.80.80.80/32\"]."
   type        = list(string)
 
   validation {

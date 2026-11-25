@@ -53,7 +53,7 @@ resource "google_sql_database" "db" {
   instance = google_sql_database_instance.mysql[0].name
 }
 
-# Mismo usuario y contraseña que en la VM; puede crear bases de datos y tablas
+# Mismo usuario y contraseña que en la VM
 resource "google_sql_user" "user" {
   count    = local.sql_enabled ? 1 : 0
   name     = var.db_user
@@ -62,7 +62,7 @@ resource "google_sql_user" "user" {
   password = var.db_password
 }
 
-# Carga el esquema desde local. Requiere el cliente "mysql" local y la IP en authorized_cidrs.
+# Carga el esquema desde local, requiere el cliente "mysql" local y la IP en authorized_cidrs.
 resource "null_resource" "schema" {
   count = local.sql_enabled && var.schema_path != null ? 1 : 0
 

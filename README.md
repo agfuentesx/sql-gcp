@@ -155,7 +155,7 @@ terraform output -raw vm_bootstrap_log_command
 
 Copiar y ejecutar el comando que imprime. La instalación terminó cuando el log termina con "MySQL instalado y configurado correctamente". Para entrar a la VM por SSH, usar `terraform output -raw vm_ssh_command`.
 
-## Qué hace cada modo y por qué
+## Modos
 
 ### Modo `vm`
 

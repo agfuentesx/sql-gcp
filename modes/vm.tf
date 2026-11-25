@@ -78,8 +78,8 @@ resource "google_compute_instance" "vm" {
     }
   }
 
-  # La VM nace vacía; el startup script lee estos metadatos e instala MySQL.
-  # replace(...) quita los saltos de línea de Windows (CRLF) que romperían el script en Linux.
+  # La VM nace vacía; el startup script lee estos metadatos e instala MySQL
+  # El replace(...) quita los saltos de línea de Windows (CRLF) que romperían el script ya dentro de Linux.
   metadata = merge(
     {
       startup-script = replace(file("${path.module}/install_mysql.sh"), "\r\n", "\n")

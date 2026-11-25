@@ -1,5 +1,5 @@
 output "db_host" {
-  description = "IP pública para conectarte."
+  description = "IP pública para conectar."
   value       = module.modes.db_host
 }
 
@@ -13,7 +13,7 @@ output "vm_ssh_command" {
 }
 
 output "vm_bootstrap_log_command" {
-  description = "Solo modo vm: progreso de la instalación de MySQL (1-3 min tras el apply)."
+  description = "Solo modo vm."
   value       = module.modes.bootstrap_log_command
 }
 
